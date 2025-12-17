@@ -495,133 +495,351 @@ with tab4:
             hide_index=True
         )
 
-# Project Selection Section
-# Option 2: Tab Navigation Design for Projects Section
-# Replace lines 499-676 in ail2045_app.py with this code
+# Option 1: Grid Cards Layout for Projects Section
+# Alternative design showing all 6 projects at once
 
 st.markdown("## 🏗️ Real 6 African Infrastructure Projects - Afreximbank/AfDB/World Bank")
 
 # Projects data
-projects_data = {
+projects_grid = {
     "LAPSSET": {
-        "full_name": "🚄 LAPSSET Corridor Infrastructure",
+        "name": "LAPSSET Corridor",
+        "icon": "🚄",
         "budget": "$1.2B",
-        "description": "Lamu Port-South Sudan-Ethiopia Transport Corridor connecting East Africa regions to facilitate trade and regional integration.",
-        "country": "Kenya, Ethiopia, South Sudan",
+        "country": "Kenya, Ethiopia",
         "type": "BTC Bond",
-        "min": 100, "max": 1000, "default": 500,
-        "icon": "🚄"
+        "description": "Lamu Port-South Sudan-Ethiopia Transport Corridor",
+        "min": 100, "max": 1000, "default": 500
     },
     "Rufiji": {
-        "full_name": "⚡ Rufiji Hydro Dam Power Project",
+        "name": "Rufiji Hydro Dam",
+        "icon": "⚡",
         "budget": "$0.5B",
-        "description": "2,100 MW Hydroelectric Power Project providing clean energy to Tanzania and neighboring countries.",
         "country": "Tanzania",
         "type": "Crypto FDI",
-        "min": 50, "max": 500, "default": 200,
-        "icon": "⚡"
+        "description": "2,100 MW Hydroelectric Power Project",
+        "min": 50, "max": 500, "default": 200
     },
     "Angola": {
-        "full_name": "🌾 Eastern Angola Agricultural Zone",
+        "name": "Eastern Angola Agri",
+        "icon": "🌾",
         "budget": "$211M",
-        "description": "Agricultural Development Zone enhancing food security and rural economic development in Eastern Angola.",
         "country": "Angola",
         "type": "BTC Bond",
-        "min": 50, "max": 300, "default": 100,
-        "icon": "🌾"
+        "description": "Agricultural Development Zone",
+        "min": 50, "max": 300, "default": 100
     },
     "Egypt": {
-        "full_name": "💊 Egypt Pharmaceutical Manufacturing Hub",
+        "name": "Egypt Pharma Hub",
+        "icon": "💊",
         "budget": "$746M",
-        "description": "Pharmaceutical Manufacturing Hub establishing Egypt as a regional leader in medical production and healthcare.",
         "country": "Egypt",
         "type": "BTC Bond",
-        "min": 100, "max": 1000, "default": 300,
-        "icon": "💊"
+        "description": "Pharmaceutical Manufacturing Hub",
+        "min": 100, "max": 1000, "default": 300
     },
     "Nacala": {
-        "full_name": "🚂 Nacala Corridor Development",
+        "name": "Nacala Corridor",
+        "icon": "🚂",
         "budget": "$2.7B",
-        "description": "Railway and Port Development connecting landlocked countries to international trade routes via Mozambique.",
-        "country": "Mozambique, Malawi, Zambia",
+        "country": "Mozambique, Malawi",
         "type": "BTC Bond",
-        "min": 300, "max": 1500, "default": 800,
-        "icon": "🚂"
+        "description": "Railway and Port Development",
+        "min": 300, "max": 1500, "default": 800
     },
     "Nigeria": {
-        "full_name": "🏭 Nigeria Manufacturing Zones",
+        "name": "Nigeria Mfg Zones",
+        "icon": "🏭",
         "budget": "$300M+",
-        "description": "Special Economic Zones promoting industrial growth, job creation, and manufacturing excellence in Nigeria.",
         "country": "Nigeria",
         "type": "Crypto FDI",
-        "min": 50, "max": 500, "default": 150,
-        "icon": "🏭"
+        "description": "Special Economic Zones",
+        "min": 50, "max": 500, "default": 150
     }
 }
 
-# Create tabs for each project
-tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-    "🚄 LAPSSET",
-    "⚡ Rufiji", 
-    "🌾 Angola",
-    "💊 Egypt",
-    "🚂 Nacala",
-    "🏭 Nigeria"
-])
+# Session state for selected project (for expand functionality)
+if 'selected_project_grid' not in st.session_state:
+    st.session_state.selected_project_grid = None
 
-# Function to render project tab content
-def render_project_tab(project_key, project_data):
-    # Header with project name and budget
-    st.markdown(f"""
-    <div style="margin-bottom: 25px;">
-        <h2 style="color: #F7931A; font-size: 2rem; margin-bottom: 10px;">
-            {project_data['full_name']} {project_data['budget']}
-        </h2>
-        <div style="display: flex; gap: 12px; margin-top: 15px;">
-            <span style="background: rgba(0, 212, 255, 0.2); padding: 8px 16px; border-radius: 20px; color: #00d4ff; font-size: 1rem;">
-                📍 {project_data['country']}
-            </span>
-            <span style="background: rgba(247, 147, 26, 0.2); padding: 8px 16px; border-radius: 20px; color: #F7931A; font-size: 1rem;">
-                💰 {project_data['type']}
-            </span>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Project description
+# Create 3x2 grid of project cards
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+
+# Row 1: LAPSSET, Rufiji, Angola
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    project = projects_grid["LAPSSET"]
     st.markdown(f"""
     <div style="
-        background: rgba(255, 255, 255, 0.05);
-        padding: 20px;
-        border-radius: 12px;
-        border-left: 4px solid #F7931A;
-        margin-bottom: 30px;
-    ">
-        <p style="color: #e0e0e0; font-size: 1.1rem; line-height: 1.6; margin: 0;">
-            {project_data['description']}
+        background: linear-gradient(135deg, rgba(247, 147, 26, 0.1), rgba(0, 212, 255, 0.1));
+        padding: 25px;
+        border-radius: 15px;
+        border: 2px solid rgba(247, 147, 26, 0.3);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        height: 100%;
+    " onmouseover="this.style.borderColor='rgba(247, 147, 26, 0.6)'; this.style.boxShadow='0 12px 40px rgba(247, 147, 26, 0.3)';" 
+       onmouseout="this.style.borderColor='rgba(247, 147, 26, 0.3)'; this.style.boxShadow='0 8px 32px rgba(31, 38, 135, 0.37)';">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <span style="font-size: 3rem;">{project['icon']}</span>
+        </div>
+        <h3 style="color: #F7931A; font-size: 1.3rem; margin: 0 0 8px 0; text-align: center;">
+            {project['name']}
+        </h3>
+        <p style="color: #00d4ff; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-align: center;">
+            {project['budget']}
+        </p>
+        <p style="color: #a0a0a0; font-size: 0.95rem; margin: 8px 0; text-align: center;">
+            📍 {project['country']}
+        </p>
+        <div style="text-align: center; margin: 15px 0;">
+            <span style="background: rgba(247, 147, 26, 0.2); padding: 6px 14px; border-radius: 15px; 
+                         color: #F7931A; font-size: 0.85rem;">
+                {project['type']}
+            </span>
+        </div>
+        <p style="color: #b0b0b0; font-size: 0.9rem; margin: 12px 0; text-align: center; min-height: 40px;">
+            {project['description']}
         </p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Investment Calculator Section
-    st.markdown("""
-    <h3 style="color: #00d4ff; font-size: 1.5rem; margin-top: 30px; margin-bottom: 20px;">
-        💵 Investment Calculator
+    if st.button("Select & Invest", key="btn_lapsset", use_container_width=True):
+        st.session_state.selected_project_grid = "LAPSSET"
+
+with col2:
+    project = projects_grid["Rufiji"]
+    st.markdown(f"""
+    <div style="
+        background: linear-gradient(135deg, rgba(247, 147, 26, 0.1), rgba(0, 212, 255, 0.1));
+        padding: 25px;
+        border-radius: 15px;
+        border: 2px solid rgba(247, 147, 26, 0.3);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        height: 100%;
+    " onmouseover="this.style.borderColor='rgba(247, 147, 26, 0.6)'; this.style.boxShadow='0 12px 40px rgba(247, 147, 26, 0.3)';" 
+       onmouseout="this.style.borderColor='rgba(247, 147, 26, 0.3)'; this.style.boxShadow='0 8px 32px rgba(31, 38, 135, 0.37)';">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <span style="font-size: 3rem;">{project['icon']}</span>
+        </div>
+        <h3 style="color: #F7931A; font-size: 1.3rem; margin: 0 0 8px 0; text-align: center;">
+            {project['name']}
+        </h3>
+        <p style="color: #00d4ff; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-align: center;">
+            {project['budget']}
+        </p>
+        <p style="color: #a0a0a0; font-size: 0.95rem; margin: 8px 0; text-align: center;">
+            📍 {project['country']}
+        </p>
+        <div style="text-align: center; margin: 15px 0;">
+            <span style="background: rgba(0, 212, 255, 0.2); padding: 6px 14px; border-radius: 15px; 
+                         color: #00d4ff; font-size: 0.85rem;">
+                {project['type']}
+            </span>
+        </div>
+        <p style="color: #b0b0b0; font-size: 0.9rem; margin: 12px 0; text-align: center; min-height: 40px;">
+            {project['description']}
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("Select & Invest", key="btn_rufiji", use_container_width=True):
+        st.session_state.selected_project_grid = "Rufiji"
+
+with col3:
+    project = projects_grid["Angola"]
+    st.markdown(f"""
+    <div style="
+        background: linear-gradient(135deg, rgba(247, 147, 26, 0.1), rgba(0, 212, 255, 0.1));
+        padding: 25px;
+        border-radius: 15px;
+        border: 2px solid rgba(247, 147, 26, 0.3);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        height: 100%;
+    " onmouseover="this.style.borderColor='rgba(247, 147, 26, 0.6)'; this.style.boxShadow='0 12px 40px rgba(247, 147, 26, 0.3)';" 
+       onmouseout="this.style.borderColor='rgba(247, 147, 26, 0.3)'; this.style.boxShadow='0 8px 32px rgba(31, 38, 135, 0.37)';">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <span style="font-size: 3rem;">{project['icon']}</span>
+        </div>
+        <h3 style="color: #F7931A; font-size: 1.3rem; margin: 0 0 8px 0; text-align: center;">
+            {project['name']}
+        </h3>
+        <p style="color: #00d4ff; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-align: center;">
+            {project['budget']}
+        </p>
+        <p style="color: #a0a0a0; font-size: 0.95rem; margin: 8px 0; text-align: center;">
+            📍 {project['country']}
+        </p>
+        <div style="text-align: center; margin: 15px 0;">
+            <span style="background: rgba(247, 147, 26, 0.2); padding: 6px 14px; border-radius: 15px; 
+                         color: #F7931A; font-size: 0.85rem;">
+                {project['type']}
+            </span>
+        </div>
+        <p style="color: #b0b0b0; font-size: 0.9rem; margin: 12px 0; text-align: center; min-height: 40px;">
+            {project['description']}
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("Select & Invest", key="btn_angola", use_container_width=True):
+        st.session_state.selected_project_grid = "Angola"
+
+# Row 2: Egypt, Nacala, Nigeria
+col4, col5, col6 = st.columns(3)
+
+with col4:
+    project = projects_grid["Egypt"]
+    st.markdown(f"""
+    <div style="
+        background: linear-gradient(135deg, rgba(247, 147, 26, 0.1), rgba(0, 212, 255, 0.1));
+        padding: 25px;
+        border-radius: 15px;
+        border: 2px solid rgba(247, 147, 26, 0.3);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        height: 100%;
+    " onmouseover="this.style.borderColor='rgba(247, 147, 26, 0.6)'; this.style.boxShadow='0 12px 40px rgba(247, 147, 26, 0.3)';" 
+       onmouseout="this.style.borderColor='rgba(247, 147, 26, 0.3)'; this.style.boxShadow='0 8px 32px rgba(31, 38, 135, 0.37)';">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <span style="font-size: 3rem;">{project['icon']}</span>
+        </div>
+        <h3 style="color: #F7931A; font-size: 1.3rem; margin: 0 0 8px 0; text-align: center;">
+            {project['name']}
+        </h3>
+        <p style="color: #00d4ff; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-align: center;">
+            {project['budget']}
+        </p>
+        <p style="color: #a0a0a0; font-size: 0.95rem; margin: 8px 0; text-align: center;">
+            📍 {project['country']}
+        </p>
+        <div style="text-align: center; margin: 15px 0;">
+            <span style="background: rgba(247, 147, 26, 0.2); padding: 6px 14px; border-radius: 15px; 
+                         color: #F7931A; font-size: 0.85rem;">
+                {project['type']}
+            </span>
+        </div>
+        <p style="color: #b0b0b0; font-size: 0.9rem; margin: 12px 0; text-align: center; min-height: 40px;">
+            {project['description']}
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("Select & Invest", key="btn_egypt", use_container_width=True):
+        st.session_state.selected_project_grid = "Egypt"
+
+with col5:
+    project = projects_grid["Nacala"]
+    st.markdown(f"""
+    <div style="
+        background: linear-gradient(135deg, rgba(247, 147, 26, 0.1), rgba(0, 212, 255, 0.1));
+        padding: 25px;
+        border-radius: 15px;
+        border: 2px solid rgba(247, 147, 26, 0.3);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        height: 100%;
+    " onmouseover="this.style.borderColor='rgba(247, 147, 26, 0.6)'; this.style.boxShadow='0 12px 40px rgba(247, 147, 26, 0.3)';" 
+       onmouseout="this.style.borderColor='rgba(247, 147, 26, 0.3)'; this.style.boxShadow='0 8px 32px rgba(31, 38, 135, 0.37)';">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <span style="font-size: 3rem;">{project['icon']}</span>
+        </div>
+        <h3 style="color: #F7931A; font-size: 1.3rem; margin: 0 0 8px 0; text-align: center;">
+            {project['name']}
+        </h3>
+        <p style="color: #00d4ff; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-align: center;">
+            {project['budget']}
+        </p>
+        <p style="color: #a0a0a0; font-size: 0.95rem; margin: 8px 0; text-align: center;">
+            📍 {project['country']}
+        </p>
+        <div style="text-align: center; margin: 15px 0;">
+            <span style="background: rgba(247, 147, 26, 0.2); padding: 6px 14px; border-radius: 15px; 
+                         color: #F7931A; font-size: 0.85rem;">
+                {project['type']}
+            </span>
+        </div>
+        <p style="color: #b0b0b0; font-size: 0.9rem; margin: 12px 0; text-align: center; min-height: 40px;">
+            {project['description']}
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("Select & Invest", key="btn_nacala", use_container_width=True):
+        st.session_state.selected_project_grid = "Nacala"
+
+with col6:
+    project = projects_grid["Nigeria"]
+    st.markdown(f"""
+    <div style="
+        background: linear-gradient(135deg, rgba(247, 147, 26, 0.1), rgba(0, 212, 255, 0.1));
+        padding: 25px;
+        border-radius: 15px;
+        border: 2px solid rgba(247, 147, 26, 0.3);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        height: 100%;
+    " onmouseover="this.style.borderColor='rgba(247, 147, 26, 0.6)'; this.style.boxShadow='0 12px 40px rgba(247, 147, 26, 0.3)';" 
+       onmouseout="this.style.borderColor='rgba(247, 147, 26, 0.3)'; this.style.boxShadow='0 8px 32px rgba(31, 38, 135, 0.37)';">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <span style="font-size: 3rem;">{project['icon']}</span>
+        </div>
+        <h3 style="color: #F7931A; font-size: 1.3rem; margin: 0 0 8px 0; text-align: center;">
+            {project['name']}
+        </h3>
+        <p style="color: #00d4ff; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-align: center;">
+            {project['budget']}
+        </p>
+        <p style="color: #a0a0a0; font-size: 0.95rem; margin: 8px 0; text-align: center;">
+            📍 {project['country']}
+        </p>
+        <div style="text-align: center; margin: 15px 0;">
+            <span style="background: rgba(0, 212, 255, 0.2); padding: 6px 14px; border-radius: 15px; 
+                         color: #00d4ff; font-size: 0.85rem;">
+                {project['type']}
+            </span>
+        </div>
+        <p style="color: #b0b0b0; font-size: 0.9rem; margin: 12px 0; text-align: center; min-height: 40px;">
+            {project['description']}
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("Select & Invest", key="btn_nigeria", use_container_width=True):
+        st.session_state.selected_project_grid = "Nigeria"
+
+# Investment Calculator Section (appears when project is selected)
+if st.session_state.selected_project_grid:
+    selected_proj = st.session_state.selected_project_grid
+    selected_data = projects_grid[selected_proj]
+    
+    st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
+    st.markdown(f"""
+    <h3 style="color: #F7931A; font-size: 1.8rem; text-align: center; margin-bottom: 30px;">
+        💵 Investment Calculator - {selected_data['icon']} {selected_data['name']}
     </h3>
     """, unsafe_allow_html=True)
     
     # Investment slider
     tranche = st.slider(
         f"Investment Amount ($M)",
-        min_value=project_data['min'],
-        max_value=project_data['max'],
-        value=project_data['default'],
+        min_value=selected_data['min'],
+        max_value=selected_data['max'],
+        value=selected_data['default'],
         step=25,
-        key=f"tab_slider_{project_key}",
-        help=f"Adjust your investment from ${project_data['min']}M to ${project_data['max']}M"
+        key=f"grid_slider_{selected_proj}"
     )
     
-    # Display current investment - BIG
+    # Display current investment
     st.markdown(f"""
     <div style="text-align: center; margin: 25px 0; padding: 20px; background: rgba(247, 147, 26, 0.1); border-radius: 15px;">
         <h2 style="color: #F7931A; font-size: 3.5rem; margin: 0;">${tranche:,}M</h2>
@@ -630,13 +848,13 @@ def render_project_tab(project_key, project_data):
     """, unsafe_allow_html=True)
     
     # Calculate returns
-    if "Bond" in project_data['type']:
+    if "Bond" in selected_data['type']:
         value = tranche / 1000 * (1 + btc_cagr) ** years
         investment_period = years
         annual_return = btc_cagr * 100
     else:  # FDI
         fdi_years = 10
-        if project_key == "Rufiji":
+        if selected_proj == "Rufiji":
             value = tranche / 1000 * (1.22 ** fdi_years)
             annual_return = 22
         else:
@@ -647,123 +865,18 @@ def render_project_tab(project_key, project_data):
     roi_project = ((value * 1000 - tranche) / tranche) * 100
     gain = value - tranche/1000
     jobs_created = int(value * 100_000)
-    gdp_impact = value * 0.4
-    multiplier = value / (tranche/1000)
-    breakeven_years = investment_period / 3
     
-    # Results section with metrics
-    st.markdown("""
-    <h3 style="color: #00d4ff; font-size: 1.5rem; margin-top: 35px; margin-bottom: 20px;">
-        📊 Projected Returns & Impact
-    </h3>
-    """, unsafe_allow_html=True)
+    # Results
+    col_a, col_b, col_c = st.columns(3)
     
-    # Main results card - large
-    col1, col2 = st.columns([3, 2])
+    with col_a:
+        st.metric("💎 Final Value 2045", f"${value:.2f}B", f"+{roi_project:,.0f}%")
     
-    with col1:
-        st.markdown(f"""
-        <div style="
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(16, 185, 129, 0.3));
-            padding: 30px;
-            border-radius: 15px;
-            border: 2px solid rgba(74, 222, 128, 0.5);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.4);
-        ">
-            <h2 style="color: white; font-size: 3rem; margin: 0; margin-bottom: 8px;">${value:.2f}B</h2>
-            <p style="color: #a0a0a0; font-size: 1.2rem; margin: 0; margin-bottom: 25px;">
-                Final Value in {2026 + investment_period}
-            </p>
-            <hr style="border: none; border-top: 1px solid rgba(255, 255, 255, 0.3); margin: 25px 0;">
-            <div style="margin-top: 20px;">
-                <p style="color: white; font-size: 1.2rem; margin: 12px 0;">
-                    💎 <strong>Total Gain:</strong> ${gain:.2f}B (+{roi_project:,.0f}%)
-                </p>
-                <p style="color: white; font-size: 1.2rem; margin: 12px 0;">
-                    ⏱️ <strong>Period:</strong> {investment_period} years @ {annual_return:.1f}% CAGR
-                </p>
-                <p style="color: white; font-size: 1.2rem; margin: 12px 0;">
-                    🎯 <strong>ROI:</strong> {roi_project:,.0f}%
-                </p>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+    with col_b:
+        st.metric("📈 Total Gain", f"${gain:.2f}B", f"{investment_period} years")
     
-    with col2:
-        st.markdown(f"""
-        <div style="
-            background: rgba(0, 212, 255, 0.1);
-            padding: 25px;
-            border-radius: 15px;
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            height: 100%;
-        ">
-            <h4 style="color: #00d4ff; font-size: 1.2rem; margin-top: 0;">Quick Facts</h4>
-            <div style="margin-top: 20px;">
-                <p style="color: white; font-size: 1rem; margin: 15px 0;">
-                    💼 <strong>{jobs_created:,}</strong><br/>
-                    <span style="color: #a0a0a0; font-size: 0.9rem;">Jobs Created</span>
-                </p>
-                <p style="color: white; font-size: 1rem; margin: 15px 0;">
-                    🌍 <strong>${gdp_impact:.2f}B</strong><br/>
-                    <span style="color: #a0a0a0; font-size: 0.9rem;">GDP Impact</span>
-                </p>
-                <p style="color: white; font-size: 1rem; margin: 15px 0;">
-                    📈 <strong>{multiplier:.1f}x</strong><br/>
-                    <span style="color: #a0a0a0; font-size: 0.9rem;">Multiplier Effect</span>
-                </p>
-                <p style="color: white; font-size: 1rem; margin: 15px 0;">
-                    ⚡ <strong>{breakeven_years:.1f} years</strong><br/>
-                    <span style="color: #a0a0a0; font-size: 0.9rem;">Breakeven Est.</span>
-                </p>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    # Additional metrics row
-    st.markdown("<div style='margin-top: 25px;'></div>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.metric(
-            label="💰 Initial Investment",
-            value=f"${tranche:,}M",
-            delta=None
-        )
-    
-    with col2:
-        st.metric(
-            label="🚀 Final Value",
-            value=f"${value:.2f}B",
-            delta=f"+{roi_project:,.0f}%"
-        )
-    
-    with col3:
-        st.metric(
-            label="⏰ Time Horizon",
-            value=f"{investment_period} years",
-            delta=f"{annual_return:.1f}% CAGR"
-        )
-
-# Render each tab
-with tab1:
-    render_project_tab("LAPSSET", projects_data["LAPSSET"])
-
-with tab2:
-    render_project_tab("Rufiji", projects_data["Rufiji"])
-
-with tab3:
-    render_project_tab("Angola", projects_data["Angola"])
-
-with tab4:
-    render_project_tab("Egypt", projects_data["Egypt"])
-
-with tab5:
-    render_project_tab("Nacala", projects_data["Nacala"])
-
-with tab6:
-    render_project_tab("Nigeria", projects_data["Nigeria"])
-
+    with col_c:
+        st.metric("👷 Jobs Created", f"{jobs_created:,}", f"{annual_return:.1f}% CAGR")
 # Export Section
 st.markdown("## 📥 Export & Documentation")
 st.markdown("---")
