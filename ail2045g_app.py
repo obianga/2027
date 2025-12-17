@@ -662,24 +662,7 @@ with tab5:
 
 with tab6:
     render_project_tab("Nigeria", projects_data["Nigeria"])
-# Render each tab
-with tab1:
-    render_project_tab("LAPSSET", projects_data["LAPSSET"])
 
-with tab2:
-    render_project_tab("Rufiji", projects_data["Rufiji"])
-
-with tab3:
-    render_project_tab("Angola", projects_data["Angola"])
-
-with tab4:
-    render_project_tab("Egypt", projects_data["Egypt"])
-
-with tab5:
-    render_project_tab("Nacala", projects_data["Nacala"])
-
-with tab6:
-    render_project_tab("Nigeria", projects_data["Nigeria"])
 st.markdown("## 📥 Export & Documentation")
 st.markdown("---")
 
