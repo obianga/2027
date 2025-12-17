@@ -495,8 +495,8 @@ with tab4:
             hide_index=True
         )
 
-# Option 1: Grid Cards Layout for Projects Section
-# Alternative design showing all 6 projects at once
+# Option 1: Grid Cards Layout (COMPACT VERSION) for Projects Section
+# Smaller cards and investment section
 
 st.markdown("## 🏗️ Real 6 African Infrastructure Projects - Afreximbank/AfDB/World Bank")
 
@@ -508,7 +508,7 @@ projects_grid = {
         "budget": "$1.2B",
         "country": "Kenya, Ethiopia",
         "type": "BTC Bond",
-        "description": "Lamu Port-South Sudan-Ethiopia Transport Corridor",
+        "description": "Lamu Port-South Sudan-Ethiopia Transport",
         "min": 100, "max": 1000, "default": 500
     },
     "Rufiji": {
@@ -517,7 +517,7 @@ projects_grid = {
         "budget": "$0.5B",
         "country": "Tanzania",
         "type": "Crypto FDI",
-        "description": "2,100 MW Hydroelectric Power Project",
+        "description": "2,100 MW Hydroelectric Power",
         "min": 50, "max": 500, "default": 200
     },
     "Angola": {
@@ -535,14 +535,14 @@ projects_grid = {
         "budget": "$746M",
         "country": "Egypt",
         "type": "BTC Bond",
-        "description": "Pharmaceutical Manufacturing Hub",
+        "description": "Pharmaceutical Manufacturing",
         "min": 100, "max": 1000, "default": 300
     },
     "Nacala": {
         "name": "Nacala Corridor",
         "icon": "🚂",
         "budget": "$2.7B",
-        "country": "Mozambique, Malawi",
+        "country": "Mozambique",
         "type": "BTC Bond",
         "description": "Railway and Port Development",
         "min": 300, "max": 1500, "default": 800
@@ -558,292 +558,98 @@ projects_grid = {
     }
 }
 
-# Session state for selected project (for expand functionality)
+# Session state for selected project
 if 'selected_project_grid' not in st.session_state:
     st.session_state.selected_project_grid = None
 
-# Create 3x2 grid of project cards
-st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+# Compact card style
+def render_compact_card(project_key, project_data, column):
+    with column:
+        # Determine badge color based on type
+        badge_bg = "rgba(247, 147, 26, 0.2)" if "Bond" in project_data['type'] else "rgba(0, 212, 255, 0.2)"
+        badge_color = "#F7931A" if "Bond" in project_data['type'] else "#00d4ff"
+        
+        st.markdown(f"""
+        <div style="
+            background: linear-gradient(135deg, rgba(247, 147, 26, 0.08), rgba(0, 212, 255, 0.08));
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(247, 147, 26, 0.25);
+            box-shadow: 0 4px 12px rgba(31, 38, 135, 0.25);
+            transition: all 0.3s ease;
+            height: 100%;
+        " onmouseover="this.style.borderColor='rgba(247, 147, 26, 0.5)'; this.style.boxShadow='0 6px 20px rgba(247, 147, 26, 0.25)';" 
+           onmouseout="this.style.borderColor='rgba(247, 147, 26, 0.25)'; this.style.boxShadow='0 4px 12px rgba(31, 38, 135, 0.25)';">
+            <div style="text-align: center; margin-bottom: 8px;">
+                <span style="font-size: 2rem;">{project_data['icon']}</span>
+            </div>
+            <h4 style="color: #F7931A; font-size: 1rem; margin: 0 0 5px 0; text-align: center;">
+                {project_data['name']}
+            </h4>
+            <p style="color: #00d4ff; font-size: 1.3rem; font-weight: bold; margin: 6px 0; text-align: center;">
+                {project_data['budget']}
+            </p>
+            <p style="color: #a0a0a0; font-size: 0.8rem; margin: 5px 0; text-align: center;">
+                📍 {project_data['country']}
+            </p>
+            <div style="text-align: center; margin: 8px 0;">
+                <span style="background: {badge_bg}; padding: 3px 8px; border-radius: 10px; 
+                             color: {badge_color}; font-size: 0.7rem;">
+                    {project_data['type']}
+                </span>
+            </div>
+            <p style="color: #b0b0b0; font-size: 0.75rem; margin: 8px 0; text-align: center; min-height: 32px; line-height: 1.3;">
+                {project_data['description']}
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if st.button("Select", key=f"btn_{project_key}", use_container_width=True):
+            st.session_state.selected_project_grid = project_key
 
-# Row 1: LAPSSET, Rufiji, Angola
+# Create compact grid
+st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
+
+# Row 1
 col1, col2, col3 = st.columns(3)
+render_compact_card("LAPSSET", projects_grid["LAPSSET"], col1)
+render_compact_card("Rufiji", projects_grid["Rufiji"], col2)
+render_compact_card("Angola", projects_grid["Angola"], col3)
 
-with col1:
-    project = projects_grid["LAPSSET"]
-    st.markdown(f"""
-    <div style="
-        background: linear-gradient(135deg, rgba(247, 147, 26, 0.1), rgba(0, 212, 255, 0.1));
-        padding: 25px;
-        border-radius: 15px;
-        border: 2px solid rgba(247, 147, 26, 0.3);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        transition: all 0.3s ease;
-        cursor: pointer;
-        height: 100%;
-    " onmouseover="this.style.borderColor='rgba(247, 147, 26, 0.6)'; this.style.boxShadow='0 12px 40px rgba(247, 147, 26, 0.3)';" 
-       onmouseout="this.style.borderColor='rgba(247, 147, 26, 0.3)'; this.style.boxShadow='0 8px 32px rgba(31, 38, 135, 0.37)';">
-        <div style="text-align: center; margin-bottom: 15px;">
-            <span style="font-size: 3rem;">{project['icon']}</span>
-        </div>
-        <h3 style="color: #F7931A; font-size: 1.3rem; margin: 0 0 8px 0; text-align: center;">
-            {project['name']}
-        </h3>
-        <p style="color: #00d4ff; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-align: center;">
-            {project['budget']}
-        </p>
-        <p style="color: #a0a0a0; font-size: 0.95rem; margin: 8px 0; text-align: center;">
-            📍 {project['country']}
-        </p>
-        <div style="text-align: center; margin: 15px 0;">
-            <span style="background: rgba(247, 147, 26, 0.2); padding: 6px 14px; border-radius: 15px; 
-                         color: #F7931A; font-size: 0.85rem;">
-                {project['type']}
-            </span>
-        </div>
-        <p style="color: #b0b0b0; font-size: 0.9rem; margin: 12px 0; text-align: center; min-height: 40px;">
-            {project['description']}
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    if st.button("Select & Invest", key="btn_lapsset", use_container_width=True):
-        st.session_state.selected_project_grid = "LAPSSET"
-
-with col2:
-    project = projects_grid["Rufiji"]
-    st.markdown(f"""
-    <div style="
-        background: linear-gradient(135deg, rgba(247, 147, 26, 0.1), rgba(0, 212, 255, 0.1));
-        padding: 25px;
-        border-radius: 15px;
-        border: 2px solid rgba(247, 147, 26, 0.3);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        transition: all 0.3s ease;
-        cursor: pointer;
-        height: 100%;
-    " onmouseover="this.style.borderColor='rgba(247, 147, 26, 0.6)'; this.style.boxShadow='0 12px 40px rgba(247, 147, 26, 0.3)';" 
-       onmouseout="this.style.borderColor='rgba(247, 147, 26, 0.3)'; this.style.boxShadow='0 8px 32px rgba(31, 38, 135, 0.37)';">
-        <div style="text-align: center; margin-bottom: 15px;">
-            <span style="font-size: 3rem;">{project['icon']}</span>
-        </div>
-        <h3 style="color: #F7931A; font-size: 1.3rem; margin: 0 0 8px 0; text-align: center;">
-            {project['name']}
-        </h3>
-        <p style="color: #00d4ff; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-align: center;">
-            {project['budget']}
-        </p>
-        <p style="color: #a0a0a0; font-size: 0.95rem; margin: 8px 0; text-align: center;">
-            📍 {project['country']}
-        </p>
-        <div style="text-align: center; margin: 15px 0;">
-            <span style="background: rgba(0, 212, 255, 0.2); padding: 6px 14px; border-radius: 15px; 
-                         color: #00d4ff; font-size: 0.85rem;">
-                {project['type']}
-            </span>
-        </div>
-        <p style="color: #b0b0b0; font-size: 0.9rem; margin: 12px 0; text-align: center; min-height: 40px;">
-            {project['description']}
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    if st.button("Select & Invest", key="btn_rufiji", use_container_width=True):
-        st.session_state.selected_project_grid = "Rufiji"
-
-with col3:
-    project = projects_grid["Angola"]
-    st.markdown(f"""
-    <div style="
-        background: linear-gradient(135deg, rgba(247, 147, 26, 0.1), rgba(0, 212, 255, 0.1));
-        padding: 25px;
-        border-radius: 15px;
-        border: 2px solid rgba(247, 147, 26, 0.3);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        transition: all 0.3s ease;
-        cursor: pointer;
-        height: 100%;
-    " onmouseover="this.style.borderColor='rgba(247, 147, 26, 0.6)'; this.style.boxShadow='0 12px 40px rgba(247, 147, 26, 0.3)';" 
-       onmouseout="this.style.borderColor='rgba(247, 147, 26, 0.3)'; this.style.boxShadow='0 8px 32px rgba(31, 38, 135, 0.37)';">
-        <div style="text-align: center; margin-bottom: 15px;">
-            <span style="font-size: 3rem;">{project['icon']}</span>
-        </div>
-        <h3 style="color: #F7931A; font-size: 1.3rem; margin: 0 0 8px 0; text-align: center;">
-            {project['name']}
-        </h3>
-        <p style="color: #00d4ff; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-align: center;">
-            {project['budget']}
-        </p>
-        <p style="color: #a0a0a0; font-size: 0.95rem; margin: 8px 0; text-align: center;">
-            📍 {project['country']}
-        </p>
-        <div style="text-align: center; margin: 15px 0;">
-            <span style="background: rgba(247, 147, 26, 0.2); padding: 6px 14px; border-radius: 15px; 
-                         color: #F7931A; font-size: 0.85rem;">
-                {project['type']}
-            </span>
-        </div>
-        <p style="color: #b0b0b0; font-size: 0.9rem; margin: 12px 0; text-align: center; min-height: 40px;">
-            {project['description']}
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    if st.button("Select & Invest", key="btn_angola", use_container_width=True):
-        st.session_state.selected_project_grid = "Angola"
-
-# Row 2: Egypt, Nacala, Nigeria
+# Row 2
 col4, col5, col6 = st.columns(3)
+render_compact_card("Egypt", projects_grid["Egypt"], col4)
+render_compact_card("Nacala", projects_grid["Nacala"], col5)
+render_compact_card("Nigeria", projects_grid["Nigeria"], col6)
 
-with col4:
-    project = projects_grid["Egypt"]
-    st.markdown(f"""
-    <div style="
-        background: linear-gradient(135deg, rgba(247, 147, 26, 0.1), rgba(0, 212, 255, 0.1));
-        padding: 25px;
-        border-radius: 15px;
-        border: 2px solid rgba(247, 147, 26, 0.3);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        transition: all 0.3s ease;
-        cursor: pointer;
-        height: 100%;
-    " onmouseover="this.style.borderColor='rgba(247, 147, 26, 0.6)'; this.style.boxShadow='0 12px 40px rgba(247, 147, 26, 0.3)';" 
-       onmouseout="this.style.borderColor='rgba(247, 147, 26, 0.3)'; this.style.boxShadow='0 8px 32px rgba(31, 38, 135, 0.37)';">
-        <div style="text-align: center; margin-bottom: 15px;">
-            <span style="font-size: 3rem;">{project['icon']}</span>
-        </div>
-        <h3 style="color: #F7931A; font-size: 1.3rem; margin: 0 0 8px 0; text-align: center;">
-            {project['name']}
-        </h3>
-        <p style="color: #00d4ff; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-align: center;">
-            {project['budget']}
-        </p>
-        <p style="color: #a0a0a0; font-size: 0.95rem; margin: 8px 0; text-align: center;">
-            📍 {project['country']}
-        </p>
-        <div style="text-align: center; margin: 15px 0;">
-            <span style="background: rgba(247, 147, 26, 0.2); padding: 6px 14px; border-radius: 15px; 
-                         color: #F7931A; font-size: 0.85rem;">
-                {project['type']}
-            </span>
-        </div>
-        <p style="color: #b0b0b0; font-size: 0.9rem; margin: 12px 0; text-align: center; min-height: 40px;">
-            {project['description']}
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    if st.button("Select & Invest", key="btn_egypt", use_container_width=True):
-        st.session_state.selected_project_grid = "Egypt"
-
-with col5:
-    project = projects_grid["Nacala"]
-    st.markdown(f"""
-    <div style="
-        background: linear-gradient(135deg, rgba(247, 147, 26, 0.1), rgba(0, 212, 255, 0.1));
-        padding: 25px;
-        border-radius: 15px;
-        border: 2px solid rgba(247, 147, 26, 0.3);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        transition: all 0.3s ease;
-        cursor: pointer;
-        height: 100%;
-    " onmouseover="this.style.borderColor='rgba(247, 147, 26, 0.6)'; this.style.boxShadow='0 12px 40px rgba(247, 147, 26, 0.3)';" 
-       onmouseout="this.style.borderColor='rgba(247, 147, 26, 0.3)'; this.style.boxShadow='0 8px 32px rgba(31, 38, 135, 0.37)';">
-        <div style="text-align: center; margin-bottom: 15px;">
-            <span style="font-size: 3rem;">{project['icon']}</span>
-        </div>
-        <h3 style="color: #F7931A; font-size: 1.3rem; margin: 0 0 8px 0; text-align: center;">
-            {project['name']}
-        </h3>
-        <p style="color: #00d4ff; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-align: center;">
-            {project['budget']}
-        </p>
-        <p style="color: #a0a0a0; font-size: 0.95rem; margin: 8px 0; text-align: center;">
-            📍 {project['country']}
-        </p>
-        <div style="text-align: center; margin: 15px 0;">
-            <span style="background: rgba(247, 147, 26, 0.2); padding: 6px 14px; border-radius: 15px; 
-                         color: #F7931A; font-size: 0.85rem;">
-                {project['type']}
-            </span>
-        </div>
-        <p style="color: #b0b0b0; font-size: 0.9rem; margin: 12px 0; text-align: center; min-height: 40px;">
-            {project['description']}
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    if st.button("Select & Invest", key="btn_nacala", use_container_width=True):
-        st.session_state.selected_project_grid = "Nacala"
-
-with col6:
-    project = projects_grid["Nigeria"]
-    st.markdown(f"""
-    <div style="
-        background: linear-gradient(135deg, rgba(247, 147, 26, 0.1), rgba(0, 212, 255, 0.1));
-        padding: 25px;
-        border-radius: 15px;
-        border: 2px solid rgba(247, 147, 26, 0.3);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        transition: all 0.3s ease;
-        cursor: pointer;
-        height: 100%;
-    " onmouseover="this.style.borderColor='rgba(247, 147, 26, 0.6)'; this.style.boxShadow='0 12px 40px rgba(247, 147, 26, 0.3)';" 
-       onmouseout="this.style.borderColor='rgba(247, 147, 26, 0.3)'; this.style.boxShadow='0 8px 32px rgba(31, 38, 135, 0.37)';">
-        <div style="text-align: center; margin-bottom: 15px;">
-            <span style="font-size: 3rem;">{project['icon']}</span>
-        </div>
-        <h3 style="color: #F7931A; font-size: 1.3rem; margin: 0 0 8px 0; text-align: center;">
-            {project['name']}
-        </h3>
-        <p style="color: #00d4ff; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-align: center;">
-            {project['budget']}
-        </p>
-        <p style="color: #a0a0a0; font-size: 0.95rem; margin: 8px 0; text-align: center;">
-            📍 {project['country']}
-        </p>
-        <div style="text-align: center; margin: 15px 0;">
-            <span style="background: rgba(0, 212, 255, 0.2); padding: 6px 14px; border-radius: 15px; 
-                         color: #00d4ff; font-size: 0.85rem;">
-                {project['type']}
-            </span>
-        </div>
-        <p style="color: #b0b0b0; font-size: 0.9rem; margin: 12px 0; text-align: center; min-height: 40px;">
-            {project['description']}
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    if st.button("Select & Invest", key="btn_nigeria", use_container_width=True):
-        st.session_state.selected_project_grid = "Nigeria"
-
-# Investment Calculator Section (appears when project is selected)
+# Compact Investment Calculator (appears when project selected)
 if st.session_state.selected_project_grid:
     selected_proj = st.session_state.selected_project_grid
     selected_data = projects_grid[selected_proj]
     
-    st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-top: 25px;'></div>", unsafe_allow_html=True)
     st.markdown(f"""
-    <h3 style="color: #F7931A; font-size: 1.8rem; text-align: center; margin-bottom: 30px;">
+    <h4 style="color: #F7931A; font-size: 1.2rem; text-align: center; margin-bottom: 15px;">
         💵 Investment Calculator - {selected_data['icon']} {selected_data['name']}
-    </h3>
+    </h4>
     """, unsafe_allow_html=True)
     
-    # Investment slider
+    # Compact slider
     tranche = st.slider(
         f"Investment Amount ($M)",
         min_value=selected_data['min'],
         max_value=selected_data['max'],
         value=selected_data['default'],
         step=25,
-        key=f"grid_slider_{selected_proj}"
+        key=f"grid_slider_{selected_proj}",
+        help=f"Range: ${selected_data['min']}M - ${selected_data['max']}M"
     )
     
-    # Display current investment
+    # Compact investment display
     st.markdown(f"""
-    <div style="text-align: center; margin: 25px 0; padding: 20px; background: rgba(247, 147, 26, 0.1); border-radius: 15px;">
-        <h2 style="color: #F7931A; font-size: 3.5rem; margin: 0;">${tranche:,}M</h2>
-        <p style="color: #00d4ff; font-size: 1.2rem; margin: 5px 0;">Your Investment Amount</p>
+    <div style="text-align: center; margin: 12px 0; padding: 10px; background: rgba(247, 147, 26, 0.1); border-radius: 10px;">
+        <h3 style="color: #F7931A; font-size: 1.8rem; margin: 0;">${tranche:,}M</h3>
+        <p style="color: #00d4ff; font-size: 0.85rem; margin: 3px 0;">Your Investment</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -866,17 +672,18 @@ if st.session_state.selected_project_grid:
     gain = value - tranche/1000
     jobs_created = int(value * 100_000)
     
-    # Results
+    # Compact results row
+    st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
     col_a, col_b, col_c = st.columns(3)
     
     with col_a:
-        st.metric("💎 Final Value 2045", f"${value:.2f}B", f"+{roi_project:,.0f}%")
+        st.metric("💎 Final Value", f"${value:.2f}B", f"+{roi_project:,.0f}%")
     
     with col_b:
-        st.metric("📈 Total Gain", f"${gain:.2f}B", f"{investment_period} years")
+        st.metric("📈 Total Gain", f"${gain:.2f}B", f"{investment_period}yr")
     
     with col_c:
-        st.metric("👷 Jobs Created", f"{jobs_created:,}", f"{annual_return:.1f}% CAGR")
+        st.metric("👷 Jobs", f"{jobs_created:,}", f"{annual_return:.1f}%")
 # Export Section
 st.markdown("## 📥 Export & Documentation")
 st.markdown("---")
